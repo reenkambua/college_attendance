@@ -1,0 +1,71 @@
+{% extends 'main_app/base.html' %}
+{% load static %}
+{% block page_title %}{{ page_title }}{% endblock page_title %}
+{% block content %}
+
+<section class="content">
+    <div class="container-fluid">
+        <!-- Notification Bar -->
+        <div class="notification-bar">
+            <div id="notification-count" class="alert alert-info">
+                You have <span id="notification-number">0</span> new notifications.
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-md-12">
+                <!-- general form elements -->
+                <div class="card card-dark">
+                    <div class="card-header">
+                        <h3 class="card-title">{{ page_title }}</h3>
+                    </div>
+
+                    <!-- form start -->
+                    <div class="card-body">
+                        <div class="form-group table">
+                            <table class="table table-bordered">
+                                <tr>
+                                    <th>#</th>
+                                    <th>Date</th>
+                                    <th>Message</th>
+                                </tr>
+                                {% for notification in notifications %}
+                                    <tr>
+                                        <td>{{ forloop.counter }}</td>
+                                        <td>{{ notification.created_at }}</td>
+                                        <td>{{ notification.message }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </table>
+                        </div>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    // JavaScript to update notification count dynamically
+    document.addEventListener('DOMContentLoaded', function () {
+        // Get the number of unread notifications from the context
+        const notificationCount = {{ notifications|length }};
+        
+        // Update the notification bar
+        const notificationNumberSpan = document.getElementById('notification-number');
+        notificationNumberSpan.textContent = notificationCount;
+
+        // Show a dynamic message
+        const notificationBar = document.getElementById('notification-count');
+        if (notificationCount > 0) {
+            notificationBar.classList.remove('alert-info');
+            notificationBar.classList.add('alert-success');
+        } else {
+            notificationBar.textContent = 'You have no new notifications.';
+        }
+    });
+</script>
+
+{% endblock content %}
