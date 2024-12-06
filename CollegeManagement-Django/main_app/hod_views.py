@@ -9,9 +9,12 @@ from django.templatetags.static import static
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import UpdateView
-
+import os
 from .forms import *
 from .models import *
+from dotenv import load_dotenv
+
+load_dotenv()
 
 
 def admin_home(request):
@@ -645,7 +648,7 @@ def send_student_notification(request):
             'to': student.admin.fcm_token
         }
         headers = {'Authorization':
-                   'key=AAAA3Bm8j_M:APA91bElZlOLetwV696SoEtgzpJr2qbxBfxVBfDWFiopBWzfCfzQp2nRyC7_A2mlukZEHV4g1AmyC6P_HonvSkY2YyliKt5tT3fe_1lrKod2Daigzhb2xnYQMxUWjCAIQcUexAMPZePB',
+                   f"key={os.getenv('KEY')}",
                    'Content-Type': 'application/json'}
         data = requests.post(url, data=json.dumps(body), headers=headers)
         notification = NotificationStudent(student=student, message=message)
@@ -672,7 +675,7 @@ def send_staff_notification(request):
             'to': staff.admin.fcm_token
         }
         headers = {'Authorization':
-                   'key=AAAA3Bm8j_M:APA91bElZlOLetwV696SoEtgzpJr2qbxBfxVBfDWFiopBWzfCfzQp2nRyC7_A2mlukZEHV4g1AmyC6P_HonvSkY2YyliKt5tT3fe_1lrKod2Daigzhb2xnYQMxUWjCAIQcUexAMPZePB',
+                   f"key={os.getenv('KEY')}",
                    'Content-Type': 'application/json'}
         data = requests.post(url, data=json.dumps(body), headers=headers)
         notification = NotificationStaff(staff=staff, message=message)
